@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "chart-test-secret-external.fullname" . }}-test-connection"
+  labels:
+    {{- include "chart-test-secret-external.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "chart-test-secret-external.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
